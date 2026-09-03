@@ -1,0 +1,249 @@
+@import 'tailwindcss';
+
+/*
+ * Application TERRAIN — pensée pour un téléphone tenu d'une main, souvent avec
+ * des gants, dehors, en plein soleil. Trois conséquences qui gouvernent tout :
+ *   · les cibles tactiles ne descendent jamais sous 44 px ;
+ *   · le contraste est celui d'un plein soleil, pas d'un bureau ;
+ *   · rien d'essentiel ne se joue au survol.
+ *
+ * DEUX THÈMES. Les jetons sont déclarés une fois dans @theme (valeurs du mode
+ * SOMBRE, qui est le défaut) puis redéfinis pour le mode clair sous
+ * `[data-theme='clair']`. Les utilitaires Tailwind v4 compilent vers
+ * `var(--color-…)`, donc la bascule est immédiate et sans reconstruction.
+ *
+ * ⚠ `--color-gtq-noir` ne bouge PAS : c'est la barre du haut et l'écran
+ * d'ouverture, qui portent le logo blanc détouré.
+ */
+
+@theme {
+  --color-gtq-noir: #000000;
+
+  --color-gtq-fond: #0e1418;
+  --color-gtq-surface: #18212a;
+  /* 3,02:1 sur le fond — mesuré. Le remplissage des cartes ne les définit pas
+     (surface/fond = 1,14:1) : c est le filet qui fait le contenant. */
+  --color-gtq-filet: #516473;
+  --color-gtq-texte: #f2f6f8;
+  --color-gtq-texte2: #a9bac6;
+
+  /* Les trois couleurs de marque Génitique. */
+  --color-gtq-bleu: #1c94c4;
+  --color-gtq-orange: #e58a2a;
+  --color-gtq-vert: #6fb63f;
+}
+
+:root {
+  color-scheme: dark;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/*
+ * MODE CLAIR. Les trois couleurs de marque sont ASSOMBRIES : telles quelles,
+ * elles ne tiennent pas sur du blanc (le bleu #1c94c4 sur blanc ne donne que
+ * 3,0:1, l'orange 2,1:1, le vert 2,3:1 — mesuré). Les valeurs ci-dessous sont
+ * celles qui passent 4,5:1 tout en restant reconnaissables.
+ */
+:root[data-theme='clair'] {
+  color-scheme: light;
+
+  --color-gtq-fond: #f1f4f6;
+  --color-gtq-surface: #ffffff;
+  /* 3,04:1 sur le fond clair (surface/fond n est qu à 1,10:1). */
+  --color-gtq-filet: #878d92;
+  --color-gtq-texte: #0f1a21;
+  --color-gtq-texte2: #4a5b66;
+
+  --color-gtq-bleu: #10688c;
+  --color-gtq-orange: #8a4b06;
+  --color-gtq-vert: #2f6b12;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* ------------------------------------------------------------------ *
+ *  LE FOND — repris de « Gestion de projet HQC », demandé pour que les
+ *  outils Génitique se ressemblent d'un écran à l'autre.
+ *
+ *  Ce sont quatre halos radiaux aux trois couleurs de marque, qui dérivent
+ *  lentement. Deux versions, une par thème : sur clair les halos se posent
+ *  sur #f2f8fd, sur sombre sur le fond marin #0b2530.
+ *
+ *  ⚠ Deux précautions, parce qu'un fond coloré derrière du texte est un
+ *  risque et pas un ornement :
+ *   · les halos plafonnent à 0,30 d'opacité — le contraste du texte est
+ *     mesuré sur le point le plus défavorable, pas sur la couleur nominale ;
+ *   · l'animation s'arrête sous `prefers-reduced-motion`, et un dégradé qui
+ *     dérive en plein soleil sur un chantier n'aide personne.
+ * ------------------------------------------------------------------ */
+@keyframes halos-derive {
+  0%,
+  100% {
+    background-position:
+      0% 0%,
+      100% 6%,
+      50% 112%,
+      78% 70%;
+  }
+  50% {
+    background-position:
+      8% 6%,
+      92% 10%,
+      42% 94%,
+      70% 60%;
+  }
+}
+
+body {
+  margin: 0;
+  /* Le marin de « Gestion de projet HQC », pas le #0e1418 d origine :
+     c est ce fond-là que Raphaël a demandé. Le jeton --color-gtq-fond reste
+     inchangé, il sert ailleurs. */
+  background-color: #0b2530;
+  background-image:
+    radial-gradient(58% 85% at 0% 0%, rgba(28, 148, 196, 0.3), transparent 68%),
+    radial-gradient(52% 80% at 100% 6%, rgba(111, 182, 63, 0.26), transparent 68%),
+    radial-gradient(55% 78% at 50% 112%, rgba(229, 138, 42, 0.24), transparent 66%),
+    radial-gradient(40% 55% at 78% 70%, rgba(28, 148, 196, 0.12), transparent 70%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size:
+    130% 130%,
+    130% 130%,
+    130% 130%,
+    130% 130%;
+  animation: halos-derive 16s ease-in-out infinite;
+  color: var(--color-gtq-texte);
+  /* Pas de rebond élastique : on est dans une app, pas dans une page. */
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Le filet tricolore Génitique — signature de marque. Il vit sur du noir dans
+   les deux thèmes, donc il garde les couleurs vives d'origine. */
+.barre-gtq {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    #1c94c4 0%,
+    #1c94c4 33.33%,
+    #6fb63f 33.33%,
+    #6fb63f 66.66%,
+    #e58a2a 66.66%,
+    #e58a2a 100%
+  );
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* Champs de saisie : hauteur confortable et 16 px minimum, sinon iOS zoome
+   sur le champ à chaque mise au point. */
+input[type='text'],
+input[type='date'],
+textarea {
+  font-size: 16px;
+  min-height: 44px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--color-gtq-filet);
+  background: var(--color-gtq-surface);
+  color: var(--color-gtq-texte);
+  padding: 10px 12px;
+  outline: none;
+}
+
+input[type='text']:focus,
+input[type='date']:focus,
+textarea:focus {
+  border-color: var(--color-gtq-bleu);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gtq-bleu) 22%, transparent);
+}
+
+textarea {
+  min-height: 76px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+::placeholder {
+  color: var(--color-gtq-texte2);
+  opacity: 0.75;
+}
+
+/*
+ * Encre des boutons PLEINS (réponse active, case cochée). Elle doit basculer :
+ * mesuré, l encre noire donne 8,0/8,4/10,5:1 sur les accents du mode sombre
+ * mais tombe à 3,1/3,2/3,0:1 sur ceux du mode clair, où le blanc donne
+ * 6,8/6,5/7,1:1.
+ */
+.encre-pastille {
+  color: #000000;
+}
+:root[data-theme='clair'] .encre-pastille {
+  color: #ffffff;
+}
+
+/* Zones sûres (encoche, barre de gestes). */
+.safe-haut {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bas {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Le fond en MODE CLAIR — les mêmes halos, sur la craie bleutée de
+ *  « Gestion de projet HQC » plutôt que sur le fond marin.
+ * ------------------------------------------------------------------ */
+:root[data-theme='clair'] body {
+  background-color: #f2f8fd;
+  background-image:
+    radial-gradient(58% 85% at 0% 0%, rgba(0, 153, 216, 0.3), transparent 68%),
+    radial-gradient(52% 80% at 100% 6%, rgba(125, 194, 66, 0.26), transparent 68%),
+    radial-gradient(55% 78% at 50% 112%, rgba(245, 166, 35, 0.24), transparent 66%),
+    radial-gradient(40% 55% at 78% 70%, rgba(0, 153, 216, 0.12), transparent 70%);
+}
+
+/*
+ * Sur un chantier, un fond qui bouge est une nuisance, pas une signature.
+ * Quiconque a demandé moins d'animation n'en a plus du tout.
+ */
+@media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  ENCRE SUR LA BARRE NOIRE
+ *
+ *  ⚠️ BUG TROUVÉ À L'AUDIT, en mode clair. La barre du haut et celle des
+ *  onglets sont NOIRES dans les deux thèmes (`--color-gtq-noir` ne bouge
+ *  pas, c'est écrit plus haut) — mais leur texte employait
+ *  `--color-gtq-texte`, qui bascule. En mode clair, l'étiquette « PAR 5 »
+ *  passait donc en encre #0f1a21 sur du noir : **1,19:1**, littéralement
+ *  invisible. Les deux autres onglets tombaient à 2,98:1.
+ *
+ *  Ces trois jetons-ci ne basculent JAMAIS : ils vivent sur du noir.
+ *  Mesuré sur #000 : 18,6:1 · 8,5:1 · 6,2:1.
+ * ------------------------------------------------------------------ */
+.sur-noir {
+  color: #f2f6f8;
+}
+.sur-noir-2 {
+  color: #a9bac6;
+}
+.sur-noir-accent {
+  color: #1c94c4;
+}

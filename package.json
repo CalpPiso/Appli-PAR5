@@ -1,0 +1,31 @@
+{
+  "name": "gtq-terrain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Application terrain Génitique — PAR 5 sur téléphone",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "publier": "npm run build && node tools/publier.cjs",
+    "apercu": "node tools/serve.cjs 4190 dist",
+    "test:pdf": "node tools/test-pdf.cjs"
+  },
+  "dependencies": {
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.21.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.9",
+    "@types/node": "^26.2.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.0.9",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.14",
+    "vite-plugin-singlefile": "^2.3.3"
+  }
+}

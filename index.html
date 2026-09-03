@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- viewport-fit=cover : l'app occupe l'encoche et la barre de gestes -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#000000" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Génitique" />
+    <!-- Icône du raccourci sur l écran d accueil. Le logo blanc sur carré noir,
+         comme l écran d ouverture : le raccourci annonce ce qu on va voir.
+         Régénérer : node tools/faire-icone.cjs -->
+    <link rel="apple-touch-icon" href="/src/assets/icone-180.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/src/assets/icone-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/src/assets/icone-512.png" />
+    <title>Génitique — Terrain</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

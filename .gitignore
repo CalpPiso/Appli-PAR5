@@ -1,0 +1,13 @@
+# Dépendances
+node_modules/
+
+# Sorties de construction (régénérées par npm run publier / construire-web.cjs)
+dist/
+dist-web/
+
+# Divers
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+desktop.ini
