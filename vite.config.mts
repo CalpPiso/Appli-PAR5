@@ -49,8 +49,18 @@ function inlinerIcones(): Plugin {
   }
 }
 
+/**
+ * Le numéro de version affiché dans la barre du haut vient d'ICI, jamais d'une
+ * chaîne recopiée dans le code : deux sources finissent toujours par diverger,
+ * et une version qui ment est pire que pas de version du tout.
+ */
+const version = JSON.parse(
+  readFileSync(resolve(__dirname, 'package.json'), 'utf8')
+).version as string
+
 export default defineConfig({
   base: './',
+  define: { __VERSION__: JSON.stringify(version) },
   resolve: {
     alias: { '@': resolve(__dirname, 'src') }
   },

@@ -97,9 +97,17 @@ export function App() {
             <Logo className="h-7 w-auto" />
           </button>
           <span className="h-5 w-px bg-white/15" />
-          <h1 className="text-[15px] font-semibold tracking-tight text-white">
-            {ONGLETS.find((o) => o.id === onglet)?.libelle}
-          </h1>
+          {/* Le titre cède la place avant la version : sur un téléphone de
+              chantier, savoir QUELLE build on a dans les mains est la seule
+              façon de diagnostiquer quoi que ce soit à distance. */}
+          <div className="flex min-w-0 items-baseline gap-1.5">
+            <h1 className="truncate text-[15px] font-semibold tracking-tight text-white">
+              {ONGLETS.find((o) => o.id === onglet)?.libelle}
+            </h1>
+            <span className="sur-noir-2 shrink-0 text-[11px] font-medium tabular-nums">
+              v{__VERSION__}
+            </span>
+          </div>
 
           {/* La barre reste noire dans les deux thèmes : ses encres sont donc
               posées en blanc littéral, pas avec les jetons qui basculent. */}
