@@ -16,6 +16,7 @@ est un téléphone.
 
 | Commande | Effet |
 | --- | --- |
+| `npm i` | Installer les dépendances requises |
 | `npm run dev` | Serveur de développement |
 | `npm run build` | Contrôle des types puis construction dans `dist/` |
 | `npm run publier` | Construit puis copie **`Génitique PAR 5.html`** sur le Bureau |
