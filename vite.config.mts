@@ -1,9 +1,9 @@
-import { readdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
-import { resolve } from 'path'
-import { defineConfig, type Plugin } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import { viteSingleFile } from 'vite-plugin-singlefile'
+import { readdirSync, readFileSync, rmSync, writeFileSync } from "fs";
+import { resolve } from "path";
+import { defineConfig, type Plugin } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import { viteSingleFile } from "vite-plugin-singlefile";
 
 /**
  * Application terrain Génitique — compilée en UN SEUL fichier HTML autonome
@@ -21,32 +21,34 @@ import { viteSingleFile } from 'vite-plugin-singlefile'
  */
 function inlinerIcones(): Plugin {
   return {
-    name: 'inliner-icones',
+    name: "inliner-icones",
     closeBundle() {
-      const dist = resolve(__dirname, 'dist')
-      const indexPath = resolve(dist, 'index.html')
-      let html = readFileSync(indexPath, 'utf8')
+      const dist = resolve(__dirname, "dist");
+      const indexPath = resolve(dist, "index.html");
+      let html = readFileSync(indexPath, "utf8");
 
-      const restants: string[] = []
+      const restants: string[] = [];
       for (const fichier of readdirSync(dist)) {
-        if (!/\.(png|jpe?g|svg|webp)$/i.test(fichier)) continue
-        const ref = `./${fichier}`
+        if (!/\.(png|jpe?g|svg|webp)$/i.test(fichier)) continue;
+        const ref = `./${fichier}`;
         if (!html.includes(ref)) {
-          restants.push(fichier)
-          continue
+          restants.push(fichier);
+          continue;
         }
-        const type = fichier.endsWith('.svg') ? 'image/svg+xml' : 'image/png'
-        const b64 = readFileSync(resolve(dist, fichier)).toString('base64')
-        html = html.split(ref).join(`data:${type};base64,${b64}`)
-        rmSync(resolve(dist, fichier))
+        const type = fichier.endsWith(".svg") ? "image/svg+xml" : "image/png";
+        const b64 = readFileSync(resolve(dist, fichier)).toString("base64");
+        html = html.split(ref).join(`data:${type};base64,${b64}`);
+        rmSync(resolve(dist, fichier));
       }
 
-      writeFileSync(indexPath, html)
+      writeFileSync(indexPath, html);
       if (restants.length) {
-        console.warn(`[inliner-icones] non référencés, laissés en place : ${restants.join(', ')}`)
+        console.warn(
+          `[inliner-icones] non référencés, laissés en place : ${restants.join(", ")}`,
+        );
       }
-    }
-  }
+    },
+  };
 }
 
 /**
@@ -55,20 +57,20 @@ function inlinerIcones(): Plugin {
  * et une version qui ment est pire que pas de version du tout.
  */
 const version = JSON.parse(
-  readFileSync(resolve(__dirname, 'package.json'), 'utf8')
-).version as string
+  readFileSync(resolve(__dirname, "package.json"), "utf8"),
+).version as string;
 
 export default defineConfig({
-  base: './',
+  base: "/Appli-PAR5/",
   define: { __VERSION__: JSON.stringify(version) },
   resolve: {
-    alias: { '@': resolve(__dirname, 'src') }
+    alias: { "@": resolve(__dirname, "src") },
   },
   plugins: [react(), tailwindcss(), viteSingleFile(), inlinerIcones()],
   build: {
-    outDir: 'dist',
+    outDir: "dist",
     emptyOutDir: true,
     assetsInlineLimit: 100_000_000,
-    chunkSizeWarningLimit: 3_000
-  }
-})
+    chunkSizeWarningLimit: 3_000,
+  },
+});
